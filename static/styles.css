@@ -1,0 +1,83 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  font-family: 'Times New Roman', Times, serif;
+}
+
+/* HEADER */
+.app-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 50px;
+}
+
+.app-header h1{
+  color: #440b93;
+}
+/* FORM */
+.query-form{
+  display: flex;
+  flex-direction: row;
+  max-width: 700px;
+  margin: 30px auto;
+}
+
+.query-input{
+  flex: 1;
+  padding: 15px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border: 1px solid #ccc;
+} 
+
+.query-btn{
+  cursor: pointer;
+  padding: 15px;
+  border: none;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background-color: #440b93;
+  color: #fff;
+}
+
+/* MAIN */
+.app-main{
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+.site {
+  font-size: 0.8rem;
+  color: green;
+  margin: 10px 5px;
+}
+
+.snippet {
+  font-size: 0.9rem;
+  color: gray;
+  margin-bottom: 30px;
+}
+
+.empty-results{
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-size: 50px;
+}
+
+/* FOOTER */
+.app-footer{
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #ddd;
+  color: gray;
+}
