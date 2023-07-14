@@ -41,6 +41,7 @@ def search(query):
 
     stored_results = storage.query_results(query)
     if stored_results.shape[0] > 0:
+        storage.update_row(query)
         stored_results["created"] = pd.to_datetime(stored_results["created"])
         return stored_results[columns]
 

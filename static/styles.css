@@ -1,15 +1,15 @@
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body{
-  font-family: 'Times New Roman', Times, serif;
+body {
+  font-family: "Times New Roman", Times, serif;
 }
 
 /* HEADER */
-.app-header{
+.app-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -18,37 +18,64 @@ body{
   margin-bottom: 50px;
 }
 
-.app-header h1{
+.app-header h1 {
   color: #440b93;
 }
+.app-header a {
+  text-decoration: none;
+}
 /* FORM */
-.query-form{
+.query-form {
   display: flex;
   flex-direction: row;
-  max-width: 700px;
-  margin: 30px auto;
+  width: 100%;
 }
 
-.query-input{
+.query-input {
   flex: 1;
   padding: 15px;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
   border: 1px solid #ccc;
-} 
+}
 
-.query-btn{
+.query-btn {
   cursor: pointer;
   padding: 15px;
   border: none;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
   background-color: #440b93;
   color: #fff;
 }
 
+/* INPUT AUTOCOMPLETE */
+.autocomplete {
+  position: relative;
+  max-width: 700px;
+  margin: 30px auto;
+}
+.autocomplete-items {
+  position: absolute;
+  z-index: 999;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #f1f1f1;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+  border-left: 1px solid #d4d4d4;
+  border-right: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+  background-color: #e9e9e9;
+}
 /* MAIN */
-.app-main{
+.app-main {
   padding: 20px;
   max-width: 1000px;
   margin: auto;
@@ -65,7 +92,7 @@ body{
   margin-bottom: 30px;
 }
 
-.empty-results{
+.empty-results {
   min-height: 300px;
   display: flex;
   justify-content: center;
@@ -75,9 +102,35 @@ body{
 }
 
 /* FOOTER */
-.app-footer{
+.app-footer {
   padding: 20px;
   text-align: center;
   border-top: 1px solid #ddd;
   color: gray;
+}
+
+/* ABOUT PAGE */
+
+.description {
+  text-align: justify;
+  color: #222;
+  font-size: 20px;
+  margin-bottom: 10px;
+  line-height: 25px;
+}
+
+.features {
+  padding-left: 40px;
+  margin-bottom: 10px;
+}
+
+.features li {
+  margin: 10px 0;
+  color: #222;
+  font-size: 18px;
+}
+.chart-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
 }
