@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
+from contrast_ratio import get_contrast_ratio
 import re
 import requests
 from settings import *
@@ -154,12 +155,23 @@ class Filter():
         print("size_units_filter", size_units_percentage)
         self.filtered["rank"] -= size_units_percentage 
 
-    def sort(self):
+    def contrast_ratio_filter(self):
+        contrast_ratio = self.filtered.apply(lambda row: get_contrast_ratio(row["link"]), axis=1)
+        if contrast_ratio.max() != contrast_ratio.min():
+            normalized_count  = (contrast_ratio - contrast_ratio.min()) / (contrast_ratio.max() - contrast_ratio.min())
+        else:
+            normalized_count = 0.0
+        print("contrast_ratio", normalized_count)
+        self.filtered["rank"] -= normalized_count
+
+    def sort(self, contrast_ratio):
         self.scripts_filter()
         self.anchor_tags_filter()
         self.alt_tags_filter()
         self.aria_tags_filter()
         self.size_units_filter()
+        if contrast_ratio : 
+            self.contrast_ratio_filter()
         self.filtered = self.filtered.sort_values("rank", ascending=True)
         self.filtered["rank"] = self.filtered["rank"]
         return self.filtered
