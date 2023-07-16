@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About reRank</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='styles.css')}}"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <h1><a href="/">reRank</a></h1>
+      <a href="/about">About</a>
+    </header>
+    <main class="app-main">
+      <p class="description">
+        reRank is a custom search engine built on top of google's API, it
+        re-ranks the results in terms of an accessibilty score.<br />
+        That score is calculated based on many parameters like :
+      </p>
+      <ul class="features">
+        <li>Alt attributes on img tags</li>
+        <li>Aria attributes on html tags</li>
+        <li>Size units used in font-size</li>
+        <li>Value of contrast Ratio</li>
+        <li>Anchor tags used as links in the page</li>
+        <li>Count of Ads</li>
+      </ul>
+      <p class="description">The following figure shows the most searched queries during this month : </p>
+      <div class="chart-container">
+        <canvas id="chart"></canvas>
+      </div>
+    </main>
+    <footer class="app-footer">
+      ©<span id="year"></span> reRank - Tous Droits Réservés
+    </footer>
+
+    <script>
+      // Retrieve chart data from Flask template variables
+      const labels = {{ labels | default('[]') | tojson }};
+      const values = {{ values | default('[]') | tojson }};
+
+      // Create a new Chart.js chart
+      const ctx = document.getElementById('chart').getContext('2d');
+      const chart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: labels,
+              datasets: [{
+                  label: 'Topic',
+                  data: values,
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              responsive: true,
+              scales: {
+                  y: {
+                      beginAtZero: true
+                  }
+              }
+          }
+      });
+    </script>
+  </body>
+</html>

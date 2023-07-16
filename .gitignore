@@ -196,6 +196,5 @@ cython_debug/
 live/
 *.png
 Live*.ipynb
-*.html
 Live*
 .idea

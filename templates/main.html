@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>reRank Engine</title>
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='styles.css')}}"
+    />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1><a href="/">reRank</a></h1>
+      <a href="/about">About</a>
+    </header>
+    <div class="autocomplete">
+      <form action="/" method="post" class="query-form">
+        <input
+          type="search"
+          name="query"
+          class="query-input"
+          value="{{query}}"
+          autocomplete="off"
+        />
+        <input type="submit" value="Search" class="query-btn" />
+      </form>
+      <div id="autocomplete-items" class="autocomplete-items"></div>
+    </div>
+
+    {% if results %}
+    <main class="app-main">
+      {% for result in results%}
+      <article>
+        <a href="{{result.link}}">{{result.title}}</a>
+        <p class="site">{{result.rank}}: {{result.link}}</p>
+        <p class="snippet">{{result.snippet}}</p>
+      </article>
+      {% endfor %}
+    </main>
+    {% else %}
+    <div class="empty-results">How Can I Assist You Today ?</div>
+    {% endif %}
+
+    <footer class="app-footer">
+      ©<span id="year"></span> reRank - Tous Droits Réservés
+    </footer>
+
+    <script src="{{url_for('static', filename='main.js')}}"></script>
+  </body>
+</html>
