@@ -17,7 +17,7 @@ def search_form():
         if query : 
             results = search(query)
             fi = Filter(results)
-            filtered = fi.filter()
+            filtered = fi.sort()
             filtered["snippet"] = filtered["snippet"].apply(lambda x: html.escape(x))
             filtered=filtered.to_dict(orient='records')
         return render_template("main.html", results=filtered, query=query)

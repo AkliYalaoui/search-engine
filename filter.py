@@ -8,7 +8,7 @@ from settings import *
 with open("blacklist.txt") as f:
     domains = set(f.read().split("\n"))
 
-def tracker_urls(row):
+def tracker_scripts(row):
     soup = BeautifulSoup(row["html"])
     scripts = soup.find_all("script", {"src": True})
     srcs = [s.get("src") for s in scripts]
@@ -18,6 +18,14 @@ def tracker_urls(row):
 
     all_domains = [urlparse(s).hostname for s in srcs + href]
     return len([a for a in all_domains if a in domains])
+
+def get_anchor_tags_count(row):
+    soup = BeautifulSoup(row["html"])
+    links = soup.find_all("a", {"href": True})
+    href = [l.get("href") for l in links]
+
+    all_domains = [urlparse(s).hostname for s in href]
+    return len([a for a in all_domains if a not in domains])
 
 def get_aria_attrs_count(row):
     soup = BeautifulSoup(row["html"])
@@ -109,32 +117,49 @@ class Filter():
     def __init__(self, results):
         self.filtered = results.copy()
 
-    def tracker_filter(self):
-        tracker_count = self.filtered.apply(tracker_urls, axis=1)
-        tracker_count[tracker_count > tracker_count.median()] = RESULT_COUNT
-        self.filtered["rank"] -= tracker_count
+    def scripts_filter(self):
+        scripts_count = self.filtered.apply(tracker_scripts, axis=1)
+        if scripts_count.max() != scripts_count.min():
+            normalized_count = (scripts_count - scripts_count.min()) / (scripts_count.max() - scripts_count.min())
+        else:
+            normalized_count = 0.0
+        print("scripts_filter", normalized_count)
+        self.filtered["rank"] = normalized_count
 
-    def alt_tag_filter(self):
+    def anchor_tags_filter(self):
+        anchor_count = self.filtered.apply(get_anchor_tags_count, axis=1)
+        if anchor_count.max() != anchor_count.min():
+            normalized_count  = (anchor_count - anchor_count.min()) / (anchor_count.max() - anchor_count.min())
+        else:
+            normalized_count = 0.0
+        print("anchor_tags_filter", normalized_count)
+        self.filtered["rank"] -= normalized_count
+
+    def alt_tags_filter(self):
         alt_percentages = self.filtered.apply(get_percentage_alt_img, axis=1)
-        alt_percentages[alt_percentages < .5] = RESULT_COUNT
-        self.filtered["rank"] += alt_percentages
+        print("alt_tags_filter", alt_percentages)
+        self.filtered["rank"] -= alt_percentages
 
-    def aria_tag_filter(self):
+    def aria_tags_filter(self):
         aria_attrs_count = self.filtered.apply(get_aria_attrs_count, axis=1)
-        aria_attrs_count /= aria_attrs_count.median()
-        aria_attrs_count[aria_attrs_count <= .5] = RESULT_COUNT
-        self.filtered["rank"] += aria_attrs_count
+        if aria_attrs_count.max() != aria_attrs_count.min():
+            normalized_count  = (aria_attrs_count - aria_attrs_count.min()) / (aria_attrs_count.max() - aria_attrs_count.min())
+        else:
+            normalized_count = 0.0
+        print("aria_tags_filter", normalized_count)
+        self.filtered["rank"] -= 2* normalized_count
 
     def size_units_filter(self): 
         size_units_percentage  = self.filtered.apply(get_percentage_size_units, axis=1)
-        size_units_percentage [size_units_percentage  < .5] = RESULT_COUNT
-        self.filtered["rank"] += size_units_percentage 
+        print("size_units_filter", size_units_percentage)
+        self.filtered["rank"] -= size_units_percentage 
 
-    def filter(self):
-        self.tracker_filter()
-        self.alt_tag_filter()
-        self.aria_tag_filter()
+    def sort(self):
+        self.scripts_filter()
+        self.anchor_tags_filter()
+        self.alt_tags_filter()
+        self.aria_tags_filter()
         self.size_units_filter()
         self.filtered = self.filtered.sort_values("rank", ascending=True)
-        self.filtered["rank"] = self.filtered["rank"].round()
+        self.filtered["rank"] = self.filtered["rank"]
         return self.filtered

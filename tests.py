@@ -16,8 +16,7 @@ for link in links :
 test_cases = pd.DataFrame({
     "link": links ,
     "html" : htmls,
-    "rank" : [1, 2, 3, 4, 5, 6], 
-    "expected_order" : ["https://www.w3.org/WAI/", "https://www.bbc.co.uk/accessibility", "https://www.a11yproject.com/", "https://baleares.craigslist.org/", "https://www.dailymail.co.uk/home/index.html", "https://www.rottentomatoes.com/"]
+    "rank" : [1, 1, 1, 1, 1, 1],
 })
 
 # Instantiate the Filter class
@@ -25,7 +24,7 @@ filter_obj = Filter(test_cases)
 
 # Test filter()
 def test_filter():
-    filter_obj.filter()
+    filter_obj.sort()
     actual_rank = filter_obj.filtered["rank"]
     print(filter_obj.filtered["link"])
     print(actual_rank)
